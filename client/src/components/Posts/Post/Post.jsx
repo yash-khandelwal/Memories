@@ -5,9 +5,13 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import moment from 'moment';
 import useStyles from './styles.js';
-const Post = ({post}) => {
+import {useDispatch} from 'react-redux';
+import {deletePost, likePost} from '../../../actions/posts';
+
+const Post = ({post, setCurrentId}) => {
     const classes = useStyles();
-    console.log(post);
+    const dispatch = useDispatch();
+    // console.log(post);
     return (
         <Card className={classes.card} >
             <CardMedia 
@@ -25,7 +29,7 @@ const Post = ({post}) => {
                         color: 'white'
                     }}
                     size='small'
-                    onClick={() => {}}
+                    onClick={() => {setCurrentId(post._id)}}
                 > 
                     <MoreHorizIcon fontSize='default' />
                 </Button>
@@ -33,8 +37,9 @@ const Post = ({post}) => {
             <div className={classes.details} >
                 <Typography variant='body2' color='textSecondary' >{post.tags.split('.').map(tag => `#${tag} `)}</Typography>
             </div>
+            <Typography className={classes.title} variant='h5' gutterBottom >{post.title}</Typography>
             <CardContent>
-                <Typography className={classes.title} variant='body2' gutterBottom >{post.message}</Typography>
+                <Typography className={classes.message} variant='body2' color='textSecondary' component='p' >{post.message}</Typography>
             </CardContent>
             <CardActions
                 className={classes.cardActions}
@@ -42,16 +47,16 @@ const Post = ({post}) => {
                 <Button 
                     size='small'
                     color='primary'
-                    onClick={()=>{}}
+                    onClick={()=>dispatch(likePost(post._id))}
                 >
                     <ThumbUpAltIcon fontSize='small' />
-                    Like
+                    &nbsp;
                     {post.likeCount}
                 </Button>
                 <Button 
                     size='small'
                     color='primary'
-                    onClick={()=>{}}
+                    onClick={()=>dispatch(deletePost(post._id))}
                 >
                     <DeleteIcon fontSize='small' />
                     Delete
